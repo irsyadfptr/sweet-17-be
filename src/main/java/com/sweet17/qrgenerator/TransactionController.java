@@ -7,20 +7,17 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
+@RequiredArgsConstructor
 public class TransactionController {
 
     private final QrCodeGeneratorService qrCodeGeneratorService;
 
-    public TransactionController(QrCodeGeneratorService qrCodeGeneratorService) {
-        this.qrCodeGeneratorService = qrCodeGeneratorService;
-    }
-
-    @PostMapping("/create")
-    public ResponseEntity<TransactionDto> create(@RequestBody TransactionDto transactionDto) {
+    @PostMapping( "/create")
+    public ResponseEntity<TransactionDto> create(TransactionDto transactionDto) {
         TransactionDto responseData = qrCodeGeneratorService.create(transactionDto);
         return ResponseEntity.created(URI.create("/create/")).body(responseData);
     }
-    @GetMapping("/{link}")
+    @GetMapping( "/{link}")
     public ResponseEntity<TransactionDto> get(@PathVariable(value = "link") String link) {
         TransactionDto transactionDto = qrCodeGeneratorService.get(link);
         return ResponseEntity.created(URI.create("/" + link)).body(transactionDto);

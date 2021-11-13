@@ -13,7 +13,7 @@ public interface TransactionMapper {
     @Mapping(target = "link", expression = "java(generateLink(10))")
     TransactionDto toTransactionDto(Transaction transaction);
 
-    default String generateLink(Integer n){
+    default String generateLink(int n){
         String AlphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
                 "0123456789" + "abcdefghijklmnopqrstuvwxyz";
 

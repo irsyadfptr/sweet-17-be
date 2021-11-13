@@ -13,7 +13,8 @@ import java.util.Date;
 public class TransactionDto {
     Long transactionId;
     String fileName;
-    Date createdDate;
-    Date expiredDate;
     String link;
+//
+//    Date createdDate;
+//    Date expiredDate;
 }

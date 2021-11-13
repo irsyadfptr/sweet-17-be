@@ -7,7 +7,7 @@ import java.util.Date;
 
 
 @Entity
-@Table(name = "tbl_trx;")
+@Table(name = "sweet_tjh")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -17,8 +17,8 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long transactionId;
     String fileName;
-    Date createdDate;
-    Date expiredDate;
     String link;
+//    Date createdDate;
+//    Date expiredDate;
 
 }

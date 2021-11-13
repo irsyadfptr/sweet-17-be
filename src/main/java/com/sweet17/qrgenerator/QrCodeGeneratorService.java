@@ -29,34 +29,34 @@ public class QrCodeGeneratorService {
     private final TransactionMapper transactionMapper;
     private final TransactionRepository transactionRepository;
 
-    public BufferedImage generateQRCode(String urlText) throws Exception {
+    public static BufferedImage generateQRCode(String urlText) throws Exception {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(urlText, BarcodeFormat.QR_CODE, 200, 200);
 
         return MatrixToImageWriter.toBufferedImage(bitMatrix);
     }
 
-//    public String readQRCode(String qrcodeImage) throws Exception {
-//        BufferedImage bufferedImage = ImageIO.read(new File(qrcodeImage));
-//        LuminanceSource luminanceSource = new BufferedImageLuminanceSource(bufferedImage);
-//        BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource));
-//        Result result = new MultiFormatReader().decode(binaryBitmap);
-//        return result.getText();
-//
-//    }
+    public String readQRCode(String qrcodeImage) throws Exception {
+        BufferedImage bufferedImage = ImageIO.read(new File(qrcodeImage));
+        LuminanceSource luminanceSource = new BufferedImageLuminanceSource(bufferedImage);
+        BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource));
+        Result result = new MultiFormatReader().decode(binaryBitmap);
+        return result.getText();
 
-    // Read file from local folder
-//    public String readQR(String qrImage) throws Exception {
-//        final Resource fileResource = resourceLoader.getResource("classpath:static/" + qrImage);
-//        File QRfile = fileResource.getFile();
-//        BufferedImage bufferedImg = ImageIO.read(QRfile);
-//        LuminanceSource source = new BufferedImageLuminanceSource(bufferedImg);
-//        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-//        Result result = new MultiFormatReader().decode(bitmap);
-//        System.out.println("Barcode Format: " + result.getBarcodeFormat());
-//        System.out.println("Content: " + result.getText());
-//        return result.getText();
-//    }
+    }
+
+//     Read file from local folder
+    public String readQR(String qrImage) throws Exception {
+        final Resource fileResource = resourceLoader.getResource("classpath:static/" + qrImage);
+        File QRfile = fileResource.getFile();
+        BufferedImage bufferedImg = ImageIO.read(QRfile);
+        LuminanceSource source = new BufferedImageLuminanceSource(bufferedImg);
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        Result result = new MultiFormatReader().decode(bitmap);
+        System.out.println("Barcode Format: " + result.getBarcodeFormat());
+        System.out.println("Content: " + result.getText());
+        return result.getText();
+    }
 
     public TransactionDto create(TransactionDto transactionDto) {
         Transaction transaction = transactionMapper.toTransactionEntity(transactionDto);
@@ -70,16 +70,21 @@ public class QrCodeGeneratorService {
         return transactionMapper.toTransactionDto(transaction);
     }
 
-    //Create QR to local
-//    public String createQR(Transaction request) throws WriterException, IOException {
-//        String qcodePath = "src/main/resources/static/images/" + request.getFileName() + "-QRCode.png";
-////        String randomLink = UtilService.RandomString.getAlphaNumeric(10);
-//        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-//        BitMatrix bitMatrix = qrCodeWriter.encode(request.getTransactionId() + "\n" +  request.getLink(), BarcodeFormat.QR_CODE, 350, 350);
-//        Path path = FileSystems.getDefault().getPath(qcodePath);
-//        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
-//        return "/images/" + request.getFileName() + "-QRCode.png";
-//    }
+//    Create QR to local
+    public String createQR(TransactionDto transactionDto) throws WriterException, IOException {
+        Transaction transaction = transactionMapper.toTransactionEntity(transactionDto);
+        transactionRepository.save(transaction);
+        String qcodePath = "src/main/resources/static/images/" + transaction.getFileName() + "-QRCode.png";
+//        String randomLink = UtilService.RandomString.getAlphaNumeric(10);
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(transaction.getTransactionId() + "\n" +  transaction.getLink(), BarcodeFormat.QR_CODE, 350, 350);
+        Path path = FileSystems.getDefault().getPath(qcodePath);
+        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
+        return "/images/" + transaction.getFileName() + "-QRCode.png";
+    }
+
+
+
 }
 
 

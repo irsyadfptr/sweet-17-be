@@ -1,4 +1,4 @@
-package com.sweet17.qrgenerator;
+package com.sweet17.qrgenerator.model;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import java.util.Date;
 
 
 @Entity
-@Table(name = "tbl_trx;")
+@Table(name = "sweet_tjh")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -16,9 +16,7 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long transactionId;
-    String fileName;
+    String link;
     Date createdDate;
     Date expiredDate;
-    String link;
-
 }

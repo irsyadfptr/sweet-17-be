@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Random;
 
 public class UtilService {
-    public Date generateExpiredDate(Date date) throws Exception {
+    public static Date generateExpiredDate(Date date) throws Exception {
         Date dateNow = new Date();
         Date dateExpired = new Date(dateNow.getTime() + (24 * 3600 * 1000));
         return dateExpired;

@@ -6,23 +6,21 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.sweet17.qrgenerator.dto.TransactionDto;
+import com.sweet17.qrgenerator.model.Transaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.CharBuffer;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.Date;
 import java.util.Optional;
-import java.util.Random;
-import java.util.random.RandomGenerator;
 
 @Service
 @RequiredArgsConstructor

@@ -1,9 +1,9 @@
 package com.sweet17.qrgenerator;
 
+import com.sweet17.qrgenerator.dto.TransactionDto;
+import com.sweet17.qrgenerator.model.Transaction;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
-import java.util.Date;
 
 @Mapper(componentModel = "spring")
 public interface TransactionMapper {

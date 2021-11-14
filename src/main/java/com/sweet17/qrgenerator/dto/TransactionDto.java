@@ -1,4 +1,4 @@
-package com.sweet17.qrgenerator;
+package com.sweet17.qrgenerator.dto;
 
 import lombok.*;
 

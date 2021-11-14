@@ -1,4 +1,4 @@
-package com.sweet17.qrgenerator;
+package com.sweet17.qrgenerator.model;
 
 import lombok.*;
 
@@ -19,5 +19,4 @@ public class Transaction {
     String link;
     Date createdDate;
     Date expiredDate;
-
 }

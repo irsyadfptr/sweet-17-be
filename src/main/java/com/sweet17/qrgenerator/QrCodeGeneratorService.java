@@ -16,8 +16,11 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.CharBuffer;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.Date;
+import java.util.Optional;
 import java.util.Random;
 import java.util.random.RandomGenerator;
 
@@ -58,10 +61,26 @@ public class QrCodeGeneratorService {
         return result.getText();
     }
 
-    public TransactionDto create(TransactionDto transactionDto) {
+    public TransactionDto savingData(TransactionDto transactionDto) {
+//        Transaction transaction = transactionMapper.toTransactionEntity(transactionDto);
+//        transactionRepository.save(transaction);
+//        return transactionMapper.toTransactionDto(transaction);
+        Date dateNow = new Date();
+        Date dateExpired = new Date(dateNow.getTime() + (24 * 3600 * 1000));
         Transaction transaction = transactionMapper.toTransactionEntity(transactionDto);
-        transactionRepository.save(transaction);
-        return transactionMapper.toTransactionDto(transaction);
+
+
+        transaction.setLink(UtilService.RandomString.getAlphaNumeric(10));
+        transaction.setCreatedDate(dateNow);
+        transaction.setExpiredDate(dateExpired);
+
+        Optional<Transaction> optionalTransaction = transactionRepository.findByLink(transactionDto.getLink());
+        if (optionalTransaction.isPresent()) {
+            throw new RuntimeException("Link already exists");
+        }
+        Transaction savingTransaction = transactionRepository.save(transaction);
+
+        return transactionMapper.toTransactionDto(savingTransaction);
     }
 
     public TransactionDto get(String link) {
@@ -73,16 +92,16 @@ public class QrCodeGeneratorService {
 //    Create QR to local
     public String createQR(TransactionDto transactionDto) throws WriterException, IOException {
         Transaction transaction = transactionMapper.toTransactionEntity(transactionDto);
-        transactionRepository.save(transaction);
-        String qcodePath = "src/main/resources/static/images/" + transaction.getFileName() + "-QRCode.png";
+        String qcodePath = "src/main/resources/static/images/" + transaction.getLink() + "-QRCode.png";
 //        String randomLink = UtilService.RandomString.getAlphaNumeric(10);
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        BitMatrix bitMatrix = qrCodeWriter.encode(transaction.getTransactionId() + "\n" +  transaction.getLink(), BarcodeFormat.QR_CODE, 350, 350);
+        BitMatrix bitMatrix = qrCodeWriter.encode(transaction.getTransactionId() + "\n" +  transaction.getLink()
+                + "\n" + transaction.getCreatedDate() + "\n" + transaction.getExpiredDate(),
+                BarcodeFormat.QR_CODE, 350, 350);
         Path path = FileSystems.getDefault().getPath(qcodePath);
         MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
-        return "/images/" + transaction.getFileName() + "-QRCode.png";
+        return "/images/" + transaction.getLink() + "-QRCode.png";
     }
-
 
 
 }

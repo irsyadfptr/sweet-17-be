@@ -14,7 +14,7 @@ public class TransactionController {
 
     @PostMapping( "/create")
     public ResponseEntity<TransactionDto> create(TransactionDto transactionDto) {
-        TransactionDto responseData = qrCodeGeneratorService.create(transactionDto);
+        TransactionDto responseData = qrCodeGeneratorService.savingData(transactionDto);
         return ResponseEntity.created(URI.create("/create/")).body(responseData);
     }
     @GetMapping( "/{link}")

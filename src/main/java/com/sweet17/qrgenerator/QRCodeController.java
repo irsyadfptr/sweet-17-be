@@ -41,11 +41,20 @@ public class QRCodeController {
     }
 
     @PostMapping("/text-qrcode")
-    public String createTransaction(@ModelAttribute("request") TransactionDto request, Model model)
+    public ResponseEntity<TransactionDto> createTransaction(@ModelAttribute("request") TransactionDto request, Model model)
             throws WriterException, IOException {
-        String qrCodePath = qrCodeGeneratorService.createQR(request);
+        TransactionDto responseData = qrCodeGeneratorService.savingData(request);
+        String qrCodePath = qrCodeGeneratorService.createQR(responseData);
         model.addAttribute("code", qrCodePath);
-        return "QRcode";
+        return ResponseEntity.created(URI.create("/create/")).body(responseData);
+    }
+
+
+
+    @PostMapping( "/create")
+    public ResponseEntity<TransactionDto> create(TransactionDto transactionDto) {
+        TransactionDto responseData = qrCodeGeneratorService.savingData(transactionDto);
+        return ResponseEntity.created(URI.create("/create/")).body(responseData);
     }
 
 //    @PostMapping("/create")

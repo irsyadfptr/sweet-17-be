@@ -16,9 +16,8 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long transactionId;
-    String fileName;
     String link;
-//    Date createdDate;
-//    Date expiredDate;
+    Date createdDate;
+    Date expiredDate;
 
 }

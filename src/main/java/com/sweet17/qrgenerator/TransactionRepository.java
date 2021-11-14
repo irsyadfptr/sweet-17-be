@@ -8,5 +8,7 @@ import java.util.Optional;
 @Repository
 public interface TransactionRepository extends JpaRepository <Transaction, Long> {
     Optional<Transaction> findTransactionByLink (String link);
+    Optional<Transaction> findByLink(String link);
+
 
 }

@@ -6,11 +6,16 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.sweet17.qrgenerator.dto.LinkDto;
+import com.sweet17.qrgenerator.dto.PointDto;
+import com.sweet17.qrgenerator.dto.ResponseDto;
 import com.sweet17.qrgenerator.dto.TransactionDto;
 import com.sweet17.qrgenerator.model.Transaction;
+import com.sweet17.qrgenerator.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -29,13 +34,6 @@ public class QrCodeGeneratorService {
     private final ResourceLoader resourceLoader;
     private final TransactionMapper transactionMapper;
     private final TransactionRepository transactionRepository;
-
-    public static BufferedImage generateQRCode(String urlText) throws Exception {
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        BitMatrix bitMatrix = qrCodeWriter.encode(urlText, BarcodeFormat.QR_CODE, 200, 200);
-
-        return MatrixToImageWriter.toBufferedImage(bitMatrix);
-    }
 
     public String readQRCode(String qrcodeImage) throws Exception {
         BufferedImage bufferedImage = ImageIO.read(new File(qrcodeImage));
@@ -101,7 +99,26 @@ public class QrCodeGeneratorService {
         return "/images/" + transaction.getLink() + "-QRCode.png";
     }
 
+    public BufferedImage createQRRemote(TransactionDto transactionDto) throws Exception {
+        Transaction transaction = transactionMapper.toTransactionEntity(transactionDto);
+        String qcodePath = "src/main/resources/static/images/" + transaction.getLink() + "-QRCode.png";
+//        String randomLink = UtilService.RandomString.getAlphaNumeric(10);
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(
+                "https://sweet-17.herokuapp.com/game/" + transaction.getLink(),
+                BarcodeFormat.QR_CODE, 350, 350);
+        return MatrixToImageWriter.toBufferedImage(bitMatrix);
+    }
 
+    public ResponseDto validation(LinkDto link) {
+        Transaction transaction = transactionRepository.findByLink(link.getLink())
+                .orElseThrow(() -> new ResourceNotFoundException("Unauthorized"));
+        ResponseDto responseDto = new ResponseDto();
+        String message = "Request masuk";
+        responseDto.setStatus(HttpStatus.ACCEPTED.value());
+        responseDto.setMessage(message);
+        return responseDto;
+    }
 }
 
 

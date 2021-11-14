@@ -4,6 +4,7 @@ package com.sweet17.qrgenerator.service;
 import com.sweet17.qrgenerator.ResourceNotFoundException;
 import com.sweet17.qrgenerator.UserMapper;
 import com.sweet17.qrgenerator.UserRepository;
+import com.sweet17.qrgenerator.dto.PointDto;
 import com.sweet17.qrgenerator.dto.ResponseDto;
 import com.sweet17.qrgenerator.dto.UserDto;
 import com.sweet17.qrgenerator.model.User;
@@ -44,15 +45,16 @@ public class UserService {
         return userMapper.toUserDto(user);
     }
 
-    public ResponseDto update(Long userId, Integer point) {
+    public ResponseDto update(Long userId, PointDto point) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("student with id " + userId + " not found."));
         ResponseDto responseDto = new ResponseDto();
         String message = "request success. but, nothing changed";
         if (point != null) {
-            user.setPoint(point + user.getPoint());
+            user.setPoint(point.getPoint() + user.getPoint());
             userRepository.save(user);
-            message = "Selamat anda mendapatkan " + point + "total point anda sekarang " + user.getPoint();
+            message = "Selamat anda mendapatkan " + point.getPoint() + " total point anda sekarang "
+                    + user.getPoint() + " point.";
         }
         responseDto.setStatus(HttpStatus.ACCEPTED.value());
         responseDto.setMessage(message);

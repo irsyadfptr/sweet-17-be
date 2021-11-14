@@ -1,6 +1,7 @@
 package com.sweet17.qrgenerator.controller;
 
 
+import com.sweet17.qrgenerator.dto.PointDto;
 import com.sweet17.qrgenerator.dto.ResponseDto;
 import com.sweet17.qrgenerator.service.UserService;
 import com.sweet17.qrgenerator.dto.UserDto;
@@ -49,7 +50,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDto> updatePoint(@PathVariable(value = "id") Long id,
-                                              @RequestParam (required = false) Integer point){
+                                               @RequestBody PointDto point){
         ResponseDto responseDto = userService.update(id, point);
         return ResponseEntity.created(URI.create("/edit/")).body(responseDto);
     }

@@ -15,6 +15,6 @@ public interface UserMapper {
 
     List<UserDto> toUserDto(List<User> users);
 
-    @Mapping(target = "point", constant = "10")
+    @Mapping(target = "point", constant = "0")
     User toUserEntity(UserDto userDto);
 }

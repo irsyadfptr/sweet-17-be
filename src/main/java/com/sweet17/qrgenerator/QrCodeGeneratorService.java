@@ -94,7 +94,7 @@ public class QrCodeGeneratorService {
 //        String randomLink = UtilService.RandomString.getAlphaNumeric(10);
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(
-                "www.https://sweet-17.herokuapp.com/game/" + transaction.getLink(),
+                "https://sweet-17.herokuapp.com/game/" + transaction.getLink(),
                 BarcodeFormat.QR_CODE, 350, 350);
         Path path = FileSystems.getDefault().getPath(qcodePath);
         MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
